@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 const ForgotPassowrd = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  const [alert, setAlert] = useState([]);
+  const [alerts, setAlert] = useState([]);
 
   // const onToggle = (id, e) => {
   //   let element = document.getElementById(id);
@@ -26,20 +26,13 @@ const ForgotPassowrd = () => {
 
     try {
       let result = await axios.get('http://localhost:1234/api/resendResetPassword?email=' + email);
-
+      console.log(result)
       setAlert([]);
-      if (
-        window.confirm(
-          result.data.message +
-          ', Reset password link has been sent to your email'
-        )
-      ) {
-        return;
-      }
+      Swal.fire(result.data.message, ' Link reset password sent to ' + result.data.email);
       document.querySelector('button').disabled = false;
       document.getElementById('spinner').classList.add('d-none');
     } catch (error) {
-      console.log(error.response.data.errMessage);
+      console.log(error);
       setAlert(error.response.data.errMessage);
       document.querySelector('button').disabled = false;
       document.getElementById('spinner').classList.add('d-none');
@@ -53,12 +46,12 @@ const ForgotPassowrd = () => {
           <span className="fs-2 fw-bold mb-4">MedSoc</span>
           <span className="fs-5 mb-4 ms-2">Reset Password</span>
           <div
-            class={alert.length === 0 ? '' : 'alert alert-danger'}
+            class={alerts.length === 0 ? '' : 'alert alert-danger'}
             role="alert"
           >
-            {!alert
+            {!alerts
               ? ''
-              : alert.map((i) => (
+              : alerts.map((i) => (
                 <ul>
                   <li>{i}</li>
                 </ul>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 
 const ResendToken = () => {
   const location = useLocation();
@@ -39,7 +40,7 @@ const ResendToken = () => {
       }
     } catch (error) {
       //   console.log(error);
-      alert(error.response.data.message);
+      Swal.fire(error.response.data.message);
     }
   };
 
